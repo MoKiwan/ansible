@@ -28,3 +28,5 @@
 ##		Upgrade all the package updates that are available
 ###			ansible all -m apt -a "upgrade=dist" --become --ask-become-pass
 
+##		Start ansible playbook
+###			ansible-playbook --ask-become-pass [playbook name.yml]
