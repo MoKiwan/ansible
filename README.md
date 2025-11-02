@@ -1,8 +1,8 @@
 # ansible
 
-###This is my Ansible Repo###
+#This is my Ansible Repo
 
-#-----HELP-----#
+# -----HELP-----
 
 ##		Connection Test:
 ###			ansible all -m ping
