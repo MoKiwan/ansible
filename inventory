@@ -1,3 +1,6 @@
+[workstations]
+192.168.178.30
+
 [web_servers]
 192.168.178.50 
 
