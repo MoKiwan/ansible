@@ -28,5 +28,12 @@
 ##		Upgrade all the package updates that are available
 ###			ansible all -m apt -a "upgrade=dist" --become --ask-become-pass
 
+##              List Tags
+###                     --list-tags [playbook name.yml]  
+
 ##		Start ansible playbook
 ###			ansible-playbook --ask-become-pass [playbook name.yml]
+
+##		Start ansible playbook with tags
+###			ansible-playbook --tags [TAG] --ask-become-pass [playbook name .yml]
+
