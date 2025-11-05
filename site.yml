@@ -53,6 +53,14 @@
       group: root
       mode: 0644
 
+  - name: start apache (Ubuntu)
+    tags: apache, Ubuntu
+    service:
+      name: apache2
+      state: started
+      enabled: true
+    when: ansible_distribution == "Ubuntu"
+
 
 - hosts: db_servers
   become: true
@@ -76,3 +84,22 @@
       name: samba
       state: latest
 
+
+- hosts: 'all:!workstations'
+  name: Servieces Check
+  become: true
+  tags: check
+  tasks:
+
+  - name: Gather all services
+    service_facts:
+
+  - name: Show services status
+    debug:
+      msg: "{{ item }} is {{ services[item].state }}"
+    when: item in services
+    loop:
+      - apache2
+      - mariadb
+      - mysql
+      - smbd
