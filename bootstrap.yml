@@ -1,0 +1,47 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates ubunto
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create "Rick" user
+    tags: always
+    user:
+      name: rick
+      groups: root
+
+  - name: add ssh key for "Rick"
+    tags: always
+    authorized_key:
+      user: rick
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVwC9sZrc5woXUTRhnmuNav4V122fTjHacBmXsZmVX+ ansible
+"
+
+  - name: add sudoers file for "Rick"
+    tags: always
+    copy:
+      src: sudoer_rick
+      dest: /etc/sudoers.d/rick
+      owner: root
+      group: root
+      mode: 0440
+
+
+
+
+
+
+
+
