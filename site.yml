@@ -4,30 +4,25 @@
   become: true
   pre_tasks:
 
-  - name: install updates ubunto
+  - name: update repo cache (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
 
 
-- hosts: workstations
+- hosts: all
   become: true
   tasks:
 
-  - name: install unzip
-    package:
-      name: unzip
 
-  - name: install terraform
-    unarchive:
-      src: https://releases.hashicorp.com/terraform/1.13.4/terraform_1.13.4_linux_amd64.zip 
-      dest: /usr/local/bin
-      remote_src: yes
-      mode: 0755
-      owner: root
-      group: root
+  - name: add ssh key for "Rick"
+    tags: always
+    authorized_key:
+      user: rick
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVwC9sZrc5woXUTRhnmuNav4V122fTjHacBmXsZmVX+ ansible
+"
 
 
 
@@ -43,6 +38,7 @@
         - libapache2-mod-php
       state: latest
     when: ansible_distribution == "Ubuntu"
+
 
   - name: copy default html file for site
     tags:  apache,apache2
@@ -85,7 +81,7 @@
       state: latest
 
 
-- hosts: 'all:!workstations'
+- hosts: all
   name: Servieces Check
   become: true
   tags: check
