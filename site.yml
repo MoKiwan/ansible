@@ -4,98 +4,34 @@
   become: true
   pre_tasks:
 
-  - name: update repo cache (Ubuntu)
+  - name: update repository index (Ubuntu)
     tags: always
     apt:
       update_cache: yes
     changed_when: false
     when: ansible_distribution == "Ubuntu"
 
-
 - hosts: all
   become: true
-  tasks:
+  roles:
+    - base
 
-
-  - name: add ssh key for "Rick"
-    tags: always
-    authorized_key:
-      user: rick
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVwC9sZrc5woXUTRhnmuNav4V122fTjHacBmXsZmVX+ ansible
-"
-
-
+- hosts: workstations
+  become: true
+  roles:
+    - workstations
 
 - hosts: web_servers
   become: true
-  tasks:
-
-  - name: install apache & php packages for Ubuntu
-    tags: apache,apache2,ubuntu
-    apt:
-      name:
-        - apache2
-        - libapache2-mod-php
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
-
-  - name: copy default html file for site
-    tags:  apache,apache2
-    copy:
-      src: default_site.html
-      dest: /var/www/html/index.html
-      owner: root
-      group: root
-      mode: 0644
-
-  - name: start apache (Ubuntu)
-    tags: apache, Ubuntu
-    service:
-      name: apache2
-      state: started
-      enabled: true
-    when: ansible_distribution == "Ubuntu"
-
+  roles:
+    - web_servers
 
 - hosts: db_servers
   become: true
-  tasks:
-
-  - name: install mariadb package (ubuntu)
-    tags: db,mariadb,ubuntu
-    apt:
-      name: mariadb-server
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
+  roles:
+    - db_servers
 
 - hosts: file_servers
   become: true
-  tasks:
-
-  - name: install samba package
-    tags: samba
-    package:
-      name: samba
-      state: latest
-
-
-- hosts: all
-  name: Servieces Check
-  become: true
-  tags: check
-  tasks:
-
-  - name: Gather all services
-    service_facts:
-
-  - name: Show services status
-    debug:
-      msg: "{{ item }} is {{ services[item].state }}"
-    when: item in services
-    loop:
-      - apache2
-      - mariadb
-      - mysql
-      - smbd
+  roles:
+    - file_servers
